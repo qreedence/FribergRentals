@@ -1,0 +1,49 @@
+﻿@page
+@model FribergRentals.Pages.Admin.ManageContent.Admins.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Admin</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Admin.Email" class="control-label"></label>
+                <input asp-for="Admin.Email" class="form-control" />
+                <span asp-validation-for="Admin.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Admin.Password" class="control-label"></label>
+                <input asp-for="Admin.Password" class="form-control" />
+                <span asp-validation-for="Admin.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Admin.VerifyPassword" class="control-label"></label>
+                <input asp-for="Admin.VerifyPassword" class="form-control" />
+                <span asp-validation-for="Admin.VerifyPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Admin.SessionToken" class="control-label"></label>
+                <input asp-for="Admin.SessionToken" class="form-control" />
+                <span asp-validation-for="Admin.SessionToken" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,13 @@
+﻿@page
+@model FribergRentals.Pages.Login.LoginSuccessfulModel
+@{
+}
+
+@if (@Model.User != null)
+{
+    <p>Successfully logged in as @Model.User.Email</p>
+}
+else
+{
+    <p>Login failed</p>
+}
