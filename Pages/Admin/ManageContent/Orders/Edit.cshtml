@@ -3,48 +3,35 @@
 
 @{
     ViewData["Title"] = "Edit";
+    if (string.IsNullOrEmpty(HttpContext.Request.Cookies["SessionToken"]))
+    {
+        HttpContext.Response.Redirect("/Login/SessionExpired");
+    }
 }
 
-<h1>Edit</h1>
-
-<h4>Order</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="card-center">
+    <h1>Edit Order</h1>
+    <form method="post">
+        <div class="card-text">
+            <div class="validation-error" asp-validation-summary="ModelOnly"></div>
             <input type="hidden" asp-for="Order.Id" />
-            <div class="form-group">
-                <label asp-for="Order.PickUpDate" class="control-label"></label>
-                <input asp-for="Order.PickUpDate" class="form-control" />
-                <span asp-validation-for="Order.PickUpDate" class="text-danger"></span>
+            <div class="form-pair">
+                <label class="input-label" asp-for="Order.PickUpDate"></label>
+                <input class="input-textbox" asp-for="Order.PickUpDate" />
+                <span class="validation-error" asp-validation-for="Order.PickUpDate"></span><br />
             </div>
-            <div class="form-group">
-                <label asp-for="Order.ReturnDate" class="control-label"></label>
-                <input asp-for="Order.ReturnDate" class="form-control" />
-                <span asp-validation-for="Order.ReturnDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Order.TotalPrice" class="control-label"></label>
-                <input asp-for="Order.TotalPrice" class="form-control" />
-                <span asp-validation-for="Order.TotalPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Order.TimeOfOrder" class="control-label"></label>
-                <input asp-for="Order.TimeOfOrder" class="form-control" />
-                <span asp-validation-for="Order.TimeOfOrder" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
-
+            <div class="form-pair">
+                <label class="input-label" asp-for="Order.ReturnDate"></label>
+                <input class="input-textbox" asp-for="Order.ReturnDate" />
+                <span class="validation-error" asp-validation-for="Order.ReturnDate"></span><br />
+            </div>
+        </div>
+        <div class="button-row">
+            <input class="button positive" type="submit" value="Save" />
+            <a asp-page="./Index"><button type="button" class="button">Back</button></a>
+        </div>
+    </form>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

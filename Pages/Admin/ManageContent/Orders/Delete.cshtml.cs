@@ -6,31 +6,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using FribergRentals.Data;
+using FribergRentals.Data.Interfaces;
 using FribergRentals.Data.Models;
+using FribergRentals.Data.Repositories;
+using FribergRentals.Utilities;
 
 namespace FribergRentals.Pages.Admin.ManageContent.Orders
 {
     public class DeleteModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IOrder orderRepo;
+        private readonly SessionUtility sessionUtility;
 
-        public DeleteModel(ApplicationDbContext context)
+        public DeleteModel(IOrder orderRepo, SessionUtility sessionUtility)
         {
-            _context = context;
+            this.orderRepo = orderRepo;
+            this.sessionUtility = sessionUtility;
         }
 
         [BindProperty]
         public Order Order { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public IActionResult OnGet(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var order = await _context.Orders.FirstOrDefaultAsync(m => m.Id == id);
-
+            var order = orderRepo.GetById(id);
             if (order == null)
             {
                 return NotFound();
@@ -39,24 +38,33 @@ namespace FribergRentals.Pages.Admin.ManageContent.Orders
             {
                 Order = order;
             }
+            if (string.IsNullOrEmpty(HttpContext.Request.Cookies["SessionToken"]))
+            {
+                HttpContext.Response.Redirect("/Login/SessionExpired");
+            }
+            else
+            {
+                string userAuthLevel = sessionUtility.CheckUser(HttpContext);
+                if (userAuthLevel == "admin")
+                {
+                    return Page();
+                }
+                else if (userAuthLevel == "user")
+                {
+                    HttpContext.Response.Redirect("/Login/SessionExpired");
+                }
+            }
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public IActionResult OnPost(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var order = await _context.Orders.FindAsync(id);
+            var order=orderRepo.GetById(id);
             if (order != null)
             {
                 Order = order;
-                _context.Orders.Remove(Order);
-                await _context.SaveChangesAsync();
+                orderRepo.Delete(id);
             }
-
             return RedirectToPage("./Index");
         }
     }

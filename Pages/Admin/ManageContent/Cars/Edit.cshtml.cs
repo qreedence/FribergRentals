@@ -9,45 +9,56 @@ using Microsoft.EntityFrameworkCore;
 using FribergRentals.Data;
 using FribergRentals.Data.Models;
 using FribergRentals.Data.Interfaces;
+using FribergRentals.Utilities;
 
 namespace FribergRentals.Pages.Admin.ManageContent.Cars
 {
     public class EditModel : PageModel
     {
         private readonly ICar carRepo;
-        public EditModel(ICar carRepo)
+        private readonly SessionUtility sessionUtility;
+        public EditModel(ICar carRepo, SessionUtility sessionUtility)
         {
             this.carRepo = carRepo;
+            this.sessionUtility = sessionUtility;
         }
 
         [BindProperty]
         public Car Car { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int id)
+        public IActionResult OnGet(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var car = carRepo.GetById(id);
             if (car == null)
             {
                 return NotFound();
             }
             Car = car;
+            if (string.IsNullOrEmpty(HttpContext.Request.Cookies["SessionToken"]))
+            {
+                HttpContext.Response.Redirect("/Login/SessionExpired");
+            }
+            else
+            {
+                string userAuthLevel = sessionUtility.CheckUser(HttpContext);
+                if (userAuthLevel == "admin")
+                {
+                    return Page();
+                }
+                else if (userAuthLevel == "user")
+                {
+                    HttpContext.Response.Redirect("/Login/SessionExpired");
+                }
+            }
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPost()
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-
             try
             {
                 carRepo.Edit(Car);
@@ -63,7 +74,6 @@ namespace FribergRentals.Pages.Admin.ManageContent.Cars
                     throw;
                 }
             }
-
             return RedirectToPage("./Index");
         }
 

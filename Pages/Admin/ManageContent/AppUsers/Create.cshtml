@@ -5,45 +5,36 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>AppUser</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="User.Email" class="control-label"></label>
-                <input asp-for="User.Email" class="form-control" />
-                <span asp-validation-for="User.Email" class="text-danger"></span>
+<div class="card-center">
+    <h1>Create New User</h1>
+    <form method="post">
+        <div class="card-text">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="form-pair">
+                <label class="input-label" asp-for="User.Email"></label>
+                <input class="input-textbox" asp-for="User.Email" />
+                <span class="validation-error" asp-validation-for="User.Email"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="User.Password" class="control-label"></label>
-                <input asp-for="User.Password" class="form-control" />
-                <span asp-validation-for="User.Password" class="text-danger"></span>
+            <div class="form-pair">
+                <label class="input-label" asp-for="User.Password"></label>
+                <input class="input-textbox" asp-for="User.Password" />
+                <span class="validation-error" asp-validation-for="User.Password"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="User.VerifyPassword" class="control-label"></label>
-                <input asp-for="User.VerifyPassword" class="form-control" />
-                <span asp-validation-for="User.VerifyPassword" class="text-danger"></span>
+            <div class="form-pair">
+                <label class="input-label" asp-for="User.VerifyPassword"></label>
+                <input class="input-textbox" asp-for="User.VerifyPassword" />
+                <span class="validation-error" asp-validation-for="User.VerifyPassword"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="User.SessionToken" class="control-label"></label>
-                <input asp-for="User.SessionToken" class="form-control" />
-                <span asp-validation-for="User.SessionToken" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-page="Index">Back to List</a>
+        </div>
+        <div class="button-row">
+            <input class="button positive" type="submit" value="Create" />
+            <a asp-page="Index"><button type="button" class="button">Back</button></a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

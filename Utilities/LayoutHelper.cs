@@ -7,7 +7,6 @@ namespace FribergRentals.Utilities
     {
         public static string GetLayout(HttpContext context)
         {
-            Console.WriteLine("GetLayout method reached");
             var serviceProvider = context.RequestServices;
             var sessionToken = context.Request.Cookies[("SessionToken")];
             var userRepo = serviceProvider.GetService<IUser>();

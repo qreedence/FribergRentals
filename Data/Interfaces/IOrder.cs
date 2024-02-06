@@ -6,8 +6,9 @@ namespace FribergRentals.Data.Interfaces
     public interface IOrder
     {
         Order GetById(int id);
-        IEnumerable<Order> GetByExpression(Expression<Func<Order, bool>> predicate);
         IEnumerable<Order> GetAll();
+        public IList<Order> GetOrdersWithRelatedEntities(Expression<Func<Order, bool>> predicate);
+        void LoadRelatedEntities(Order order);
 
         public void Add(Order order);
 

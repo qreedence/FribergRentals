@@ -8,26 +8,24 @@ using Microsoft.EntityFrameworkCore;
 using FribergRentals.Data;
 using FribergRentals.Data.Models;
 using FribergRentals.Data.Interfaces;
+using FribergRentals.Utilities;
 
 namespace FribergRentals.Pages.Admin.ManageContent.Cars
 {
     public class DetailsModel : PageModel
     {
         private readonly ICar carRepo;
-        public DetailsModel(ICar carRepo)
+        private readonly SessionUtility sessionUtility;
+        public DetailsModel(ICar carRepo, SessionUtility sessionUtility)
         {
             this.carRepo = carRepo;
+            this.sessionUtility = sessionUtility;
         }
 
         public Car Car { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int id)
+        public IActionResult OnGet(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var car = carRepo.GetById(id);
             if (car == null)
             {
@@ -36,6 +34,22 @@ namespace FribergRentals.Pages.Admin.ManageContent.Cars
             else
             {
                 Car = car;
+            }
+            if (string.IsNullOrEmpty(HttpContext.Request.Cookies["SessionToken"]))
+            {
+                HttpContext.Response.Redirect("/Login/SessionExpired");
+            }
+            else
+            {
+                string userAuthLevel = sessionUtility.CheckUser(HttpContext);
+                if (userAuthLevel == "admin")
+                {
+                    return Page();
+                }
+                else if (userAuthLevel == "user")
+                {
+                    HttpContext.Response.Redirect("/Login/SessionExpired");
+                }
             }
             return Page();
         }

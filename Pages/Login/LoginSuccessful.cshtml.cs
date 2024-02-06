@@ -19,10 +19,11 @@ namespace FribergRentals.Pages.Login
             this.sessionUtility = sessionUtility;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
             var sessionToken = sessionUtility.ExtractSessionToken(HttpContext);
             User = userRepo.ValidateSessionToken(sessionToken);
+            return Page();
         }
     }
 }

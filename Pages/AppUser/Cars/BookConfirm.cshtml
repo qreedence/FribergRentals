@@ -1,0 +1,44 @@
+﻿@page
+@model FribergRentals.Pages.AppUser.Cars.BookConfirmModel
+@{
+    ViewData["Title"] = "Confirm Booking";
+    if (string.IsNullOrEmpty(HttpContext.Request.Cookies["SessionToken"]))
+    {
+        HttpContext.Response.Redirect("/Login/Login");
+    }
+}
+
+
+
+<div class="card-center">
+    <h1>Confirm Booking</h1>
+    <p class="card-text">
+        <span class="input-label">@Html.DisplayNameFor(model => model.Order.Car.Brand):</span>
+        @Html.DisplayFor(model => model.Order.Car.Brand)
+        <br />
+        <span class="input-label">@Html.DisplayNameFor(model => model.Order.Car.Model):</span>
+        @Html.DisplayFor(model => model.Order.Car.Model)
+        <br />
+        <span class="input-label">@Html.DisplayNameFor(model => model.Order.User.Email):</span>
+        @Html.DisplayFor(model => model.Order.User.Email)
+        <br />
+        <span class="input-label">@Html.DisplayNameFor(model => model.Order.PickUpDate):</span>
+        @Html.DisplayFor(model => model.Order.PickUpDate)
+        <br />
+        <span class="input-label">@Html.DisplayNameFor(model => model.Order.ReturnDate):</span>
+        @Html.DisplayFor(model => model.Order.ReturnDate)
+        <br />
+        <span class="input-label">Total Price:</span>
+        @Html.DisplayFor(model => model.Order.TotalPrice)
+        <br />
+        <span class="input-label">Time of order:</span>
+        @Html.DisplayFor(model => model.Order.TimeOfOrder)
+    </p>
+    <div class="button-row">
+        <form asp-page-handler="OnPost">
+            <input class="button" type="submit" value="Confirm" />
+        </form>
+        <a asp-page="./Browse"><button class="button danger">Cancel</button></a>
+    </div>
+
+</div>

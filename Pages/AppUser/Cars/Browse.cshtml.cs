@@ -15,9 +15,10 @@ namespace FribergRentals.Pages.AppUser.Cars
 
         public IList<Car> Car { get; set; } = default!;
 
-        public async Task OnGetAsync()
+        public IActionResult OnGet()
         {
             Car = carRepo.GetAll().ToList();
+            return Page();
         }
     }
 }

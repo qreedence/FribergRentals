@@ -1,0 +1,41 @@
+﻿@page
+@model FribergRentals.Pages.AppUser.Orders.CancelOrderModel
+
+@{
+    ViewData["Title"] = "Cancel Order";
+}
+
+
+<div class="card-center">
+    <h1>Cancel Order</h1>
+
+    <h3>Are you sure you want to cancel this order?</h3>
+        <p class="card-text">
+            <span class="input-label">@Html.DisplayNameFor(model => model.Order.Car.Brand):</span>
+            @Html.DisplayFor(model => model.Order.Car.Brand)
+            <br />
+            <span class="input-label">@Html.DisplayNameFor(model => model.Order.Car.Model):</span>
+            @Html.DisplayFor(model => model.Order.Car.Model)
+            <br />
+            <span class="input-label">@Html.DisplayNameFor(model => model.Order.User.Email):</span>
+            @Html.DisplayFor(model => model.Order.User.Email)
+            <br />
+            <span class="input-label">@Html.DisplayNameFor(model => model.Order.PickUpDate):</span>
+            @Html.DisplayFor(model => model.Order.PickUpDate)
+            <br />
+            <span class="input-label">@Html.DisplayNameFor(model => model.Order.ReturnDate):</span>
+            @Html.DisplayFor(model => model.Order.ReturnDate)
+            <br />
+            <span class="input-label">Total Price:</span>
+            @Html.DisplayFor(model => model.Order.TotalPrice)
+            <br />
+            <span class="input-label">Time of order:</span>
+            @Html.DisplayFor(model => model.Order.TimeOfOrder)
+        </p>
+        <form method="post">
+            <input type="hidden" asp-for="Order.Id" />
+            <input class="button danger" type="submit" value="Confirm" />
+            <a asp-page="./MyOrders"><button class="button">Back</button></a>
+        </form>
+</div>
+

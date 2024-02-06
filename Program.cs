@@ -3,6 +3,7 @@ using FribergRentals.Data.Interfaces;
 using FribergRentals.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using FribergRentals.Utilities;
+using FribergRentals.Pages.Login;
 
 namespace FribergRentals
 {

@@ -1,0 +1,15 @@
+﻿@page
+@model FribergRentals.Pages.AppUser.Cars.OrderCompleteModel
+@{
+    ViewData["Title"] = "Booking Complete";
+    if (string.IsNullOrEmpty(HttpContext.Request.Cookies["SessionToken"]))
+    {
+        HttpContext.Response.Redirect("/Login/SessionExpired");
+    }
+}
+
+<div class="card-center">
+    <p class="card-text">Order successfully completed. <br />
+        Thank you for choosing Friberg Car Rentals!
+        </p>
+</div>

@@ -1,4 +1,5 @@
 ﻿using FribergRentals.Data.Models;
+using System.Linq.Expressions;
 
 namespace FribergRentals.Data.Interfaces
 {
@@ -6,7 +7,6 @@ namespace FribergRentals.Data.Interfaces
     {
         Car GetById(int id);
         IEnumerable<Car> GetAll();
-
         public void Add(Car car);
 
         public void Edit(Car car);

@@ -10,28 +10,29 @@ namespace FribergRentals.Pages.Login
     {
         private readonly IUser userRepo;
 
-        [BindProperty]
-        [Required]
-        [DisplayName("E-Mail")]
-        public string Email { get; set; }
-        [BindProperty]
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
         public LoginModel(IUser userRepo)
         {
             this.userRepo = userRepo;
         }
+
+        [BindProperty]
+        [Required]
+        [DisplayName("E-Mail")]
+        public string LoginEmail { get; set; }
+        [BindProperty]
+        [Required]
+        [DisplayName("Password")]
+        [DataType(DataType.Password)]
+        public string LoginPassword { get; set; }
 
         public IActionResult OnGet()
         {
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPost()
         {
-            var user = userRepo.ValidateUser(Email, Password);
+            var user = userRepo.ValidateUser(LoginEmail, LoginPassword);
             if (user == null)
             {
                 ModelState.AddModelError(string.Empty, ("Invalid username or password"));
@@ -58,5 +59,30 @@ namespace FribergRentals.Pages.Login
             var token = Guid.NewGuid().ToString("N");
             return token;
         }
+
+        [BindProperty]
+        public FribergRentals.Data.Models.AppUser User { get; set; } = default!;
+
+        public IActionResult OnPostCreateAccount()
+        {
+            //ModelState funkar inte, räknar med Login-fälten också
+            if (string.IsNullOrEmpty(User.Email) || string.IsNullOrEmpty(User.Password) || string.IsNullOrEmpty(User.VerifyPassword))
+            {
+                return Page();
+            }
+
+            try
+            {
+                userRepo.Add(User);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+
+            return RedirectToPage("./CreateSuccessful");
+        }
     }
 }
+

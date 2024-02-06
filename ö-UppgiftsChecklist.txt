@@ -1,0 +1,21 @@
+--FIXES:
+
+-Användare försöker logga in med e-mailadress som inte finns, validationmeddelande?
+-Session Expires, automatisk utloggning?
+
+
+
+Bakgrund
+
+IT-gurun och superentreprenören Marcus Friberg har börjat spendera frukten av sina framgångar 
+på exklusiva bilar. Hur mycket sonen Malte än gillar pappas nya hobby så är resten av familjen
+(sambon Maria och dottern Malin)inte lika entusiastiskaöver att gården fylls med bilar.
+
+Som den kreativa problemlösare han är har Marcus nu registrerat bolaget Friberg Car Rentals AB för att legitimera sitt 
+beteende.Marcus har kontaktat din arbetsgivare, Friberg IT-Solutions för att beställa en webbapplikation för det nya bolagets 
+räkning. Eftersom hela upplägget är en fasad för att legitimera Marcus nya hobby finns egentligen inte någon ambition om att 
+hyra ut några bilar, men applikationen behöver kunna hantera det. Eftersom Marcus har god insyn i Friberg IT-Solutions har 
+du fått instruktioner av din närmaste chef att endast leverera lösningar på det som framgår avbeställningen. 
+God arkitektur bör tillämpas och standarder följas men features som inte nämns får du inte lägga tid på.
+
+

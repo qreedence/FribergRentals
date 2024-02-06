@@ -17,5 +17,13 @@ namespace FribergRentals.Utilities
 
             return serializedValue != null ? JsonConvert.DeserializeObject<T>(serializedValue) : default(T);
         }
+
+        public static void CheckSession(HttpContext httpContext)
+        {
+            if (string.IsNullOrEmpty(httpContext.Request.Cookies["SessionToken"]))
+            {
+                httpContext.Response.Redirect("/Login/SessionExpired");
+            }
+        }
     }
 }

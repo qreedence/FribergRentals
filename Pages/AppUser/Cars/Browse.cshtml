@@ -4,52 +4,21 @@
     ViewData["Title"] = "Browse";
 }
 
-<h1>Browse</h1>
+<h1 class="card-title">Our Cars</h1>
+<div class="car-grid">
+    @foreach (var item in Model.Car)
+    {
+        <div class="car-grid-item">
+            <img class="car-grid-thumbnail" src="@Html.DisplayFor(modelItem=>item.ImageUrl)" />
+            <p class="car-grid-title">@Html.DisplayFor(modelItem => item.Brand) @Html.DisplayFor(modelItem => item.Model)</p>
+            <a asp-page="./Details" asp-route-id="@item.Id">
+                <button class="car-grid-button">
+                    Show More
+                </button>
+            </a>
+        </div>
+    }
+</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Car[0].Brand)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Car[0].Model)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Car[0].Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Car[0].IsAvailable)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Car[0].Price)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Car)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Brand)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Model)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsAvailable)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    <a asp-page="./Details" asp-route-id="@item.Id">Book</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+

@@ -1,5 +1,7 @@
 ﻿using FribergRentals.Data.Interfaces;
 using FribergRentals.Data.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace FribergRentals.Data.Repositories
 {
@@ -14,6 +16,7 @@ namespace FribergRentals.Data.Repositories
         public IEnumerable<Car> GetAll()
         {
             return _applicationDbContext.Cars.OrderBy(x => x.Id);
+
         }
 
         public Car GetById(int id)

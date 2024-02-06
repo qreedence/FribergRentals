@@ -8,27 +8,25 @@ using Microsoft.EntityFrameworkCore;
 using FribergRentals.Data;
 using FribergRentals.Data.Models;
 using FribergRentals.Data.Interfaces;
+using FribergRentals.Utilities;
 
 namespace FribergRentals.Pages.Admin.ManageContent.AppUsers
 {
     public class DetailsModel : PageModel
     {
         private readonly IUser userRepo;
+        private readonly SessionUtility sessionUtility;
 
-        public DetailsModel(IUser userRepo)
+        public DetailsModel(IUser userRepo, SessionUtility sessionUtility)
         {
             this.userRepo = userRepo;
+            this.sessionUtility = sessionUtility;
         }
 
         public User User { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int id)
+        public IActionResult OnGet(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var user = userRepo.GetById(id);
             if (user == null)
             {
@@ -37,6 +35,22 @@ namespace FribergRentals.Pages.Admin.ManageContent.AppUsers
             else
             {
                 User = user;
+            }
+            if (string.IsNullOrEmpty(HttpContext.Request.Cookies["SessionToken"]))
+            {
+                HttpContext.Response.Redirect("/Login/SessionExpired");
+            }
+            else
+            {
+                string userAuthLevel = sessionUtility.CheckUser(HttpContext);
+                if (userAuthLevel == "admin")
+                {
+                    return Page();
+                }
+                else if (userAuthLevel == "user")
+                {
+                    HttpContext.Response.Redirect("/Login/SessionExpired");
+                }
             }
             return Page();
         }

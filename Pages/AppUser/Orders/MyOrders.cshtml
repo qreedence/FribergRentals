@@ -1,0 +1,144 @@
+﻿@page
+@model FribergRentals.Pages.AppUser.Orders.MyOrdersModel
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+@if(Model.UpcomingOrders.Count == 0 && Model.PastOrders.Count == 0)
+{
+    <div class="card-center">
+        <p class="card-text">
+            No orders found.
+        </p>
+    </div>
+}
+
+@if(Model.UpcomingOrders.Count > 0)
+{
+    <h1 class="card-title">Upcoming Orders</h1>
+<div class="admin-table-container">
+<table class="admin-table">
+    <thead class="admin-thead">
+        <tr class="admin-tr">
+            <th class="admin-th">
+                Time of Order
+            </th>
+            <th class="admin-th">
+                Thumbnail
+            </th>
+            <th class="admin-th">
+                @Html.DisplayNameFor(model => model.UpcomingOrders[0].Car.Brand)
+            </th>
+            <th class ="admin-th">
+                @Html.DisplayNameFor(model => model.UpcomingOrders[0].Car.Model)
+            </th>
+            <th class="admin-th">
+                @Html.DisplayNameFor(model => model.UpcomingOrders[0].PickUpDate)
+            </th>
+            <th class="admin-th">
+                @Html.DisplayNameFor(model => model.UpcomingOrders[0].ReturnDate)
+            </th>
+            <th class="admin-th">
+                @Html.DisplayNameFor(model => model.UpcomingOrders[0].TotalPrice)
+            </th>
+            <th class="admin-th">Cancel Order</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.UpcomingOrders)
+        {
+            <tr class="admin-tr hover">
+                <td class="admin-td">
+                     @Html.DisplayFor(modelItem => item.TimeOfOrder)
+                </td>
+                <td class ="admin-td">
+                <img class="table-thumbnail" src="@Html.DisplayFor(modelItem=>item.Car.ImageUrl)"/>
+                </td>
+                <td class="admin-td">
+                    @Html.DisplayFor(modelItem => item.Car.Brand)
+                </td>
+                <td class="admin-td">
+                    @Html.DisplayFor(modelItem => item.Car.Model)
+                </td>
+                <td class="admin-td">
+                    @Html.DisplayFor(modelItem => item.PickUpDate)
+                </td>
+                <td class="admin-td">
+                    @Html.DisplayFor(modelItem => item.ReturnDate)
+                </td>
+                <td class="admin-td">
+                    @Html.DisplayFor(modelItem => item.TotalPrice)
+                </td>
+                <td class="admin-td">
+                    <a asp-page="./CancelOrder" asp-route-id="@item.Id"><button class="button danger">Cancel</button></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+}
+
+@if(Model.PastOrders.Count > 0)
+{
+    <h1 class="card-title">Past Orders</h1>
+<div class="admin-table-container">
+<table class="admin-table">
+    <thead class="admin-thead">
+        <tr class="admin-tr">
+            <th class="admin-th">
+                Time of Order
+            </th>
+            <th class="admin-th">
+                Thumbnail
+            </th>
+            <th class="admin-th">
+                @Html.DisplayNameFor(model => model.PastOrders[0].Car.Brand)
+            </th>
+            <th class="admin-th">
+                @Html.DisplayNameFor(model => model.PastOrders[0].Car.Model)
+            </th>
+            <th class="admin-th">
+                @Html.DisplayNameFor(model => model.PastOrders[0].PickUpDate)
+            </th>
+            <th class="admin-th">
+                @Html.DisplayNameFor(model => model.PastOrders[0].ReturnDate)
+            </th>
+            <th class="admin-th">
+                Total Price
+            </th>
+        </tr>
+    </thead>
+    <tbody class="admin-tbody">
+        @foreach (var item in Model.PastOrders)
+        {
+            <tr class="admin-tr hover">
+                <td class="admin-td">
+                    @Html.DisplayFor(modelItem => item.TimeOfOrder)
+                </td>
+                <td class ="admin-td">
+                <img class="table-thumbnail" src="@Html.DisplayFor(modelItem=>item.Car.ImageUrl)"/>
+                </td>
+                <td class="admin-td">
+                    @Html.DisplayFor(modelItem => item.Car.Brand)
+                </td>
+                <td class="admin-td">
+                    @Html.DisplayFor(modelItem => item.Car.Model)
+                </td class="admin-td">
+                <td class="admin-td">
+                    @Html.DisplayFor(modelItem => item.PickUpDate)
+                </td>
+                <td class="admin-td">
+                    @Html.DisplayFor(modelItem => item.ReturnDate)
+                </td>
+                <td class="admin-td">
+                    @Html.DisplayFor(modelItem => item.TotalPrice)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+}
+

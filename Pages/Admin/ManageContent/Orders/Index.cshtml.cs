@@ -7,23 +7,45 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using FribergRentals.Data;
 using FribergRentals.Data.Models;
+using FribergRentals.Data.Interfaces;
+using FribergRentals.Utilities;
 
 namespace FribergRentals.Pages.Admin.ManageContent.Orders
 {
     public class IndexModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IOrder orderRepo;
+        private readonly SessionUtility sessionUtility;
 
-        public IndexModel(ApplicationDbContext context)
+        public IndexModel(IOrder orderRepo, SessionUtility sessionUtility)
         {
-            _context = context;
+            this.orderRepo = orderRepo;
+            this.sessionUtility = sessionUtility;
         }
 
         public IList<Order> Order { get; set; } = default!;
 
-        public async Task OnGetAsync()
+        public IActionResult OnGet()
         {
-            Order = await _context.Orders.ToListAsync();
+            Order = orderRepo.GetAll().ToList();
+            if (string.IsNullOrEmpty(HttpContext.Request.Cookies["SessionToken"]))
+            {
+                HttpContext.Response.Redirect("/Login/SessionExpired");
+            }
+
+            else
+            {
+                string userAuthLevel = sessionUtility.CheckUser(HttpContext);
+                if (userAuthLevel == "admin")
+                {
+                    return Page();
+                }
+                else if (userAuthLevel == "user")
+                {
+                    HttpContext.Response.Redirect("/Login/SessionExpired");
+                }
+            }
+            return Page();
         }
     }
 }

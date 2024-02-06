@@ -3,52 +3,85 @@
 
 @{
     ViewData["Title"] = "Index";
+    if (string.IsNullOrEmpty(HttpContext.Request.Cookies["SessionToken"]))
+    {
+        HttpContext.Response.Redirect("/Login/SessionExpired");
+    }
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Order[0].PickUpDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Order[0].ReturnDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Order[0].TotalPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Order[0].TimeOfOrder)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Order) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PickUpDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReturnDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TimeOfOrder)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="admin-table-container">
+    <table class="admin-table">
+        <thead class="admin-thead">
+            <tr class="admin-tr">
+                <th class="admin-th">
+                    Order ID
+                </th>
+                <th class="admin-th">
+                    Time of Order
+                </th>
+                <th class="admin-th">
+                    @Html.DisplayNameFor(model => model.Order[0].User.Email)
+                </th>
+                <th class="admin-th">
+                    @Html.DisplayNameFor(model => model.Order[0].Car.Brand)
+                </th>
+                <th class="admin-th">
+                    @Html.DisplayNameFor(model => model.Order[0].Car.Model)
+                </th>
+                <th class="admin-th">
+                    @Html.DisplayNameFor(model => model.Order[0].PickUpDate)
+                </th>
+                <th class="admin-th">
+                    @Html.DisplayNameFor(model => model.Order[0].ReturnDate)
+                </th>
+                <th class="admin-th">
+                    Total Price
+                </th>
+                <th class="admin-th"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Order)
+            {
+                <tr class="admin-tr hover">
+                    <td class="admin-td">
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td class="admin-td">
+                        @Html.DisplayFor(modelItem=>item.TimeOfOrder)
+                    </td>
+                    <td class="admin-td">
+                        @Html.DisplayFor(modelItem => item.User.Email)
+                    </td>
+                    <td class="admin-td">
+                        @Html.DisplayFor(modelItem => item.Car.Brand)
+                    </td>
+                    <td class="admin-td">
+                        @Html.DisplayFor(modelItem => item.Car.Model)
+                    </td>
+                    <td class="admin-td">
+                        @Html.DisplayFor(modelItem => item.PickUpDate)
+                    </td>
+                    <td class="admin-td">
+                        @Html.DisplayFor(modelItem => item.ReturnDate)
+                    </td>
+                    <td class="admin-td">
+                        @Html.DisplayFor(modelItem => item.TotalPrice)
+                    </td>
+                    <td class="admin-td">
+                        <div class="button-row">
+                            <a asp-page="./Details" asp-route-id="@item.Id"><button class="button adminButtons">Details</button></a>
+                            <a asp-page="./Delete" asp-route-id="@item.Id">
+                                <button class="button adminButtons danger">
+                                    <span class="material-symbols-outlined">
+                                        Delete
+                                    </span>
+                                </button>
+                            </a>
+                        </div>                    
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

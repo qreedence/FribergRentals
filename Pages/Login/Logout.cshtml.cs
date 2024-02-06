@@ -16,12 +16,12 @@ namespace FribergRentals.Pages.Login
             this.sessionUtility = sessionUtility;
         }
 
-        public async Task<IActionResult> OnGet()
+        public IActionResult OnGet()
         {
             string sessionToken = sessionUtility.ExtractSessionToken(HttpContext);
             var user = userRepo.ValidateSessionToken(sessionToken);
             sessionUtility.ClearSession(HttpContext);
-            userRepo.UpdateSessionToken(user, string.Empty);
+            userRepo.UpdateSessionToken(user, null);
             return RedirectToPage("/Index");
         }
     }

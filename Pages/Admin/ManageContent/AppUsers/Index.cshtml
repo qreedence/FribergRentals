@@ -5,51 +5,54 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Users[0].Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Users[0].Password)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Users[0].VerifyPassword)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Users[0].SessionToken)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Users)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VerifyPassword)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SessionToken)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="admin-table-container">
+    <table class="admin-table">
+        <thead class="admin-thead">
+            <tr class="admin-tr">
+                <th class="admin-th">
+                    @Html.DisplayNameFor(model => model.Users[0].Email)
+                </th>
+                <th class="admin-th">
+                    @Html.DisplayNameFor(model => model.Users[0].Password)
+                </th>
+                <th class="admin-th" colspan="">
+                    @Html.DisplayNameFor(model => model.Users[0].VerifyPassword)
+                </th>
+                <th class="admin-th"></th>
+            </tr>
+        </thead>
+        <tbody class="admin-tbody">
+            @foreach (var item in Model.Users)
+            {
+                <tr class="admin-tr hover">
+                    <td class="admin-td">
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td class="admin-td">
+                        @Html.DisplayFor(modelItem => item.Password)
+                    </td>
+                    <td class="admin-td">
+                        @Html.DisplayFor(modelItem => item.VerifyPassword)
+                    </td>
+                    <td class="admin-td">
+                        <div class="button-row">
+                            <a asp-page="./Edit" asp-route-id="@item.Id"><button class="button adminButtons">Edit</button></a>
+                            <a asp-page="./Details" asp-route-id="@item.Id"><button class="button adminButtons">Details</button></a>
+                            <a asp-page="./Delete" asp-route-id="@item.Id">
+                                <button class="button adminButtons danger">
+                                    <span class="material-symbols-outlined">
+                                        Delete
+                                    </span>
+                                </button>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="button-row">
+    <a asp-page="Create"><button class="button">Create New User</button></a>
+    <a asp-page="/Admin/ManageContent/Admins/Create"><button class="button">Create New Admin</button></a>
+</div>

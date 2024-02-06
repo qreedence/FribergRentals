@@ -19,26 +19,44 @@ namespace FribergRentals.Data.Repositories
 
         public IEnumerable<Order> GetAll()
         {
-            return _applicationDbContext.Orders.OrderBy(x => x.Id);
+            return _applicationDbContext.Orders
+                .OrderBy(x => x.Id)
+                .Include(order=>order.Car)
+                .Include(order=>order.User)
+                .ToList();
         }
 
         public Order GetById(int id)
         {
-            return _applicationDbContext.Orders.FirstOrDefault(x => x.Id == id);
+            Order order = _applicationDbContext.Orders.Include(x => x.Car).Include(x=>x.User).FirstOrDefault(x => x.Id == id);
+            return order;
         }
 
-        public IEnumerable<Order> GetByExpression(Expression<Func<Order, bool>> predicate)
+        public IList<Order> GetOrdersWithRelatedEntities(Expression<Func<Order, bool>> predicate)
         {
-            return _applicationDbContext.Orders
-         .Where(predicate)
-         .ToList();
+            var orders = _applicationDbContext.Orders.Where(predicate).ToList();
+            foreach (var order in orders)
+            {
+                LoadRelatedEntities(order);
+            }
+            return orders;
+        }
+
+        public void LoadRelatedEntities(Order order)
+        {
+            _applicationDbContext.Entry(order)
+                .Reference(x => x.Car)
+                .Load();
+
+            _applicationDbContext.Entry(order)
+                .Reference(x => x.User)
+                .Load();
         }
 
         public void Add(Order order)
         {
-            DetachEntity(order.Car);
-            DetachEntity(order.User);
-
+            order.Car = carRepo.GetById(order.Car.Id);
+            order.User = userRepo.GetById(order.User.Id);
             _applicationDbContext.Orders.Add(order);
             _applicationDbContext.SaveChanges();
         }
@@ -57,17 +75,7 @@ namespace FribergRentals.Data.Repositories
 
         public void Confirm(Order order)
         {
-            // _applicationDbContext.Orders.Add(order);
             _applicationDbContext.SaveChanges();
-        }
-
-        public void DetachEntity<T>(T entity) where T : class
-        {
-            var entry = _applicationDbContext.Entry(entity);
-            if (entry.State != EntityState.Detached)
-            {
-                entry.State = EntityState.Detached;
-            }
         }
     }
 }

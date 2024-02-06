@@ -38,7 +38,7 @@ namespace FribergRentals.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageUrls")
+                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -155,13 +155,13 @@ namespace FribergRentals.Migrations
                         .HasForeignKey("AppUserId");
 
                     b.HasOne("FribergRentals.Data.Models.Car", "Car")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FribergRentals.Data.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -169,6 +169,16 @@ namespace FribergRentals.Migrations
                     b.Navigation("Car");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FribergRentals.Data.Models.Car", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("FribergRentals.Data.Models.User", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("FribergRentals.Data.Models.AppUser", b =>

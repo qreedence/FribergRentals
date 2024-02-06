@@ -2,65 +2,62 @@
 @model FribergRentals.Pages.Admin.ManageContent.Cars.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "All Cars";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
+<div class="admin-table-container">
+<table class="admin-table">
+    <thead class="admin-thead">
+        <tr class="admin-tr">
+            <th class="admin-th">
+                Thumbnail
+            </th>
+            <th class="admin-th">
                 @Html.DisplayNameFor(model => model.Car[0].Brand)
             </th>
-            <th>
+            <th class="admin-th">
                 @Html.DisplayNameFor(model => model.Car[0].Model)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Car[0].Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Car[0].IsAvailable)
-            </th>
-            <th>
+            <th class="admin-th" colspan="2">
                 @Html.DisplayNameFor(model => model.Car[0].Price)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Car[0].ImageUrls)
-            </th>
-            <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="admin-tbody">
 @foreach (var item in Model.Car) {
-        <tr>
-            <td>
+            <tr class="admin-tr hover">
+                <td class ="admin-td">
+                <img class="table-thumbnail" src="@Html.DisplayFor(modelItem=>item.ImageUrl)"/>
+                </td>
+                <td class="admin-td">
                 @Html.DisplayFor(modelItem => item.Brand)
-            </td>
-            <td>
+                </td>
+            <td class="admin-td">
                 @Html.DisplayFor(modelItem => item.Model)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsAvailable)
-            </td>
-            <td>
+             </td>
+             <td class="admin-td">
                 @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageUrls)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+                <td class="admin-td">
+                    <div class="button-row">
+                        <a asp-page="./Edit" asp-route-id="@item.Id"><button class="button adminButtons">Edit</button></a>
+                        <a asp-page="./Details" asp-route-id="@item.Id"><button class="button adminButtons">Details</button></a>
+                        <a asp-page="./Delete" asp-route-id="@item.Id">
+                            <button class="button adminButtons danger">
+                                <span class="material-symbols-outlined">
+                                    Delete
+                                </span>
+                                
+                            </button>
+                        </a>
+                    </div>
             </td>
         </tr>
 }
     </tbody>
 </table>
+</div>
+<div class="admin-page-container">
+    <a asp-page="Create"><button class="button">Add New Car</button></a>
+</div>

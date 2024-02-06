@@ -1,0 +1,10 @@
+﻿@page
+@model FribergRentals.Pages.Login.SessionExpiredModel
+@{
+    ViewData["Title"] = "Session Expired";
+}
+
+<div class="card-center">
+    <p class="card-text">Oops! Looks like you're trying to access an admin-only area without the required permissions.</p>
+    <a asp-page="/Login/Login"><button class="button">Log in</button></a>
+</div>

@@ -6,29 +6,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using FribergRentals.Data;
+using FribergRentals.Data.Interfaces;
 using FribergRentals.Data.Models;
+using FribergRentals.Utilities;
 
 namespace FribergRentals.Pages.Admin.ManageContent.Orders
 {
     public class DetailsModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IOrder orderRepo;
+        private readonly SessionUtility sessionUtility;
 
-        public DetailsModel(ApplicationDbContext context)
+        public DetailsModel(IOrder orderRepo, SessionUtility sessionUtility)
         {
-            _context = context;
+            this.orderRepo = orderRepo;
+            this.sessionUtility = sessionUtility;
         }
 
         public Order Order { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public IActionResult OnGet(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var order = await _context.Orders.FirstOrDefaultAsync(m => m.Id == id);
+            var order = orderRepo.GetById(id);
             if (order == null)
             {
                 return NotFound();
@@ -36,6 +35,24 @@ namespace FribergRentals.Pages.Admin.ManageContent.Orders
             else
             {
                 Order = order;
+            }
+
+            if (string.IsNullOrEmpty(HttpContext.Request.Cookies["SessionToken"]))
+            {
+                HttpContext.Response.Redirect("/Login/SessionExpired");
+            }
+
+            else
+            {
+                string userAuthLevel = sessionUtility.CheckUser(HttpContext);
+                if (userAuthLevel == "admin")
+                {
+                    return Page();
+                }
+                else if (userAuthLevel == "user")
+                {
+                    HttpContext.Response.Redirect("/Login/SessionExpired");
+                }
             }
             return Page();
         }

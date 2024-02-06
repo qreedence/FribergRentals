@@ -19,6 +19,7 @@ namespace FribergRentals.Data.Models
         [Display(Name = "Confirm password")]
         public string VerifyPassword { get; set; }
 
+        public virtual List<Order>? Orders { get; set; }
         public string? SessionToken { get; set; }
     }
 }

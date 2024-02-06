@@ -9,38 +9,52 @@ using Microsoft.EntityFrameworkCore;
 using FribergRentals.Data;
 using FribergRentals.Data.Models;
 using FribergRentals.Data.Interfaces;
+using FribergRentals.Utilities;
 
 namespace FribergRentals.Pages.Admin.ManageContent.AppUsers
 {
     public class EditModel : PageModel
     {
         private readonly IUser userRepo;
+        private readonly SessionUtility sessionUtility;
 
-        public EditModel(IUser userRepo)
+        public EditModel(IUser userRepo, SessionUtility sessionUtility)
         {
             this.userRepo = userRepo;
+            this.sessionUtility = sessionUtility;
         }
 
         [BindProperty]
-        public User User { get; set; } = default!;
+        public FribergRentals.Data.Models.AppUser User { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int id)
+        public IActionResult OnGet(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var user = userRepo.GetById(id);
             if (user == null)
             {
                 return NotFound();
             }
-            User = user;
+            User = (Data.Models.AppUser)user;
+            if (string.IsNullOrEmpty(HttpContext.Request.Cookies["SessionToken"]))
+            {
+                HttpContext.Response.Redirect("/Login/SessionExpired");
+            }
+            else
+            {
+                string userAuthLevel = sessionUtility.CheckUser(HttpContext);
+                if (userAuthLevel == "admin")
+                {
+                    return Page();
+                }
+                else if (userAuthLevel == "user")
+                {
+                    HttpContext.Response.Redirect("/Login/SessionExpired");
+                }
+            }
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPost()
         {
             if (!ModelState.IsValid)
             {

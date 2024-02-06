@@ -7,73 +7,61 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FribergRentals.Data;
+using FribergRentals.Data.Interfaces;
 using FribergRentals.Data.Models;
+using FribergRentals.Utilities;
 
 namespace FribergRentals.Pages.Admin.ManageContent.Orders
 {
     public class EditModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IOrder orderRepo;
+        private readonly SessionUtility sessionUtility;
 
-        public EditModel(ApplicationDbContext context)
+        public EditModel(IOrder orderRepo, SessionUtility sessionUtility)
         {
-            _context = context;
+            this.orderRepo = orderRepo;
+            this.sessionUtility = sessionUtility;
         }
 
         [BindProperty]
         public Order Order { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public IActionResult OnGet(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var order = await _context.Orders.FirstOrDefaultAsync(m => m.Id == id);
+            var order = orderRepo.GetById(id);
             if (order == null)
             {
                 return NotFound();
             }
             Order = order;
-            ViewData["AppUserId"] = new SelectList(_context.AppUsers, "Id", "Password");
-            ViewData["CarId"] = new SelectList(_context.Cars, "Id", "Brand");
+            if (string.IsNullOrEmpty(HttpContext.Request.Cookies["SessionToken"]))
+            {
+                HttpContext.Response.Redirect("/Login/SessionExpired");
+            }
+            else
+            {
+                string userAuthLevel = sessionUtility.CheckUser(HttpContext);
+                if (userAuthLevel == "admin")
+                {
+                    return Page();
+                }
+                else if (userAuthLevel == "user")
+                {
+                    HttpContext.Response.Redirect("/Login/SessionExpired");
+                }
+            }
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-
-            _context.Attach(Order).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrderExists(Order.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Index");
-        }
-
-        private bool OrderExists(int id)
-        {
-            return _context.Orders.Any(e => e.Id == id);
+           orderRepo.Edit(Order);
+           return RedirectToPage("./Index");
         }
     }
 }

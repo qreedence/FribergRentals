@@ -21,6 +21,7 @@ namespace FribergRentals.Data.Models
         public DateTime ReturnDate { get; set; }
         public int NumberOfDays { get { return (int)(ReturnDate - PickUpDate).TotalDays; } }
         [Column(TypeName = "decimal(18,2)")]
+        [DisplayFormat(DataFormatString = "{0:C0}", ApplyFormatInEditMode = true)]
         public decimal TotalPrice { get; set; } = 0;
         [DataType(DataType.DateTime)]
         public DateTime TimeOfOrder { get; set; }

@@ -1,0 +1,36 @@
+﻿@page
+@model FribergRentals.Pages.AppUser.Cars.BookModel
+@{
+    ViewData["Title"] = "Select Dates";
+}
+
+<div class="card-center">
+    <div class="grid-item">
+        <h1 class="card-title">Select Dates</h1>
+        <div>
+            <form method="post" asp-page-handler="OnPost" asp-route-carId="@Model.Car.Id">
+                <div class="form-pair">
+                    <label class="input-label" asp-for="Order.PickUpDate">@Html.DisplayNameFor(model => model.Order.PickUpDate)</label>
+                    <input asp-for="Order.PickUpDate" type="date" value=@DateTime.Now.ToString("yyyy-MM-dd") />
+                </div>
+                <div class="form-pair">
+                    <label class="input-label" asp-for="Order.ReturnDate">@Html.DisplayNameFor(model => model.Order.ReturnDate)</label>
+                    <input asp-for="Order.ReturnDate" type="date" value=@DateTime.Now.ToString("yyyy-MM-dd") />
+                </div>
+                <p class="validation-error">@TempData["DateError"]</p>
+                <div class="button-row">
+                    <input class="button" type="submit" value="Book" />
+                    <a asp-page="./Browse"><button type="button" class="button">Back</button></a>
+                </div>
+            </form>
+        </div>
+        <hr />
+        <img class="card-image" src="@Html.DisplayFor(model=>model.Car.ImageUrl)" />
+        <p class="card-text">
+            @Html.DisplayFor(model => model.Car.Description) <br /><br />
+            Price per day: @Html.DisplayFor(model => model.Car.Price)
+        </p>
+    </div>
+</div>
+
+

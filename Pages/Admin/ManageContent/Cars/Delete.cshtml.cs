@@ -8,29 +8,27 @@ using Microsoft.EntityFrameworkCore;
 using FribergRentals.Data;
 using FribergRentals.Data.Models;
 using FribergRentals.Data.Interfaces;
+using FribergRentals.Utilities;
 
 namespace FribergRentals.Pages.Admin.ManageContent.Cars
 {
     public class DeleteModel : PageModel
     {
         private readonly ICar carRepo;
-        public DeleteModel(ICar carRepo)
+        private readonly SessionUtility sessionUtility;
+        public DeleteModel(ICar carRepo, SessionUtility sessionUtility)
         {
             this.carRepo = carRepo;
+            this.sessionUtility = sessionUtility;
+            
         }
 
         [BindProperty]
         public Car Car { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int id)
+        public IActionResult OnGet(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var car = carRepo.GetById(id);
-
             if (car == null)
             {
                 return NotFound();
@@ -39,22 +37,32 @@ namespace FribergRentals.Pages.Admin.ManageContent.Cars
             {
                 Car = car;
             }
+            if (string.IsNullOrEmpty(HttpContext.Request.Cookies["SessionToken"]))
+            {
+                HttpContext.Response.Redirect("/Login/SessionExpired");
+            }
+            else
+            {
+                string userAuthLevel = sessionUtility.CheckUser(HttpContext);
+                if (userAuthLevel == "admin")
+                {
+                    return Page();
+                }
+                else if (userAuthLevel == "user")
+                {
+                    HttpContext.Response.Redirect("/Login/SessionExpired");
+                }
+            }
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int id)
+        public IActionResult OnPost(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var car = carRepo.GetById(id);
             if (car != null)
             {
                 carRepo.Delete(id);
             }
-
             return RedirectToPage("./Index");
         }
     }

@@ -1,37 +1,69 @@
 ﻿@page
 @model FribergRentals.Pages.Login.LoginModel
+
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Log In";
 }
 
-<h1>Login</h1>
-
-<h4>AppUser</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="grid">
+    <div class="card-center">
+        <h1>Log In</h1>
         <form method="post" asp-page-handler="OnPost">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+            <div class="validation-error" asp-validation-summary="ModelOnly"></div>
+            <div class="card-text">
+                <div class="form-pair">
+                    <label class="input-label" asp-for="LoginEmail"></label>
+                    <input class="input-textbox" asp-for="LoginEmail" />
+                    <p><span class="validation-error" asp-validation-for="LoginEmail"></span></p>
+                </div>
+
+                <div class="form-pair">
+                    <label class="input-label" asp-for="LoginPassword"></label>
+                    <input class="input-textbox" asp-for="LoginPassword" />
+                    <p><span class="validation-error" asp-validation-for="LoginPassword"></span></p>
+                </div>
+
             </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+            <div class="button-row">
+                <input class="button" type="submit" value="Log In" />
             </div>
-            <div class="form-group">
-                <input type="submit" value="Log In" class="btn btn-primary" />
+        </form>
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="card-center">
+        <h1>Create Account</h1>
+
+        <form method="post" asp-page-handler="CreateAccount">
+            <div class="card-text">
+                <div class="form-pair">
+                    <label class="input-label" asp-for="User.Email"></label>
+                    <input class="input-textbox" asp-for="User.Email" />
+                    <p><span class="validation-error" asp-validation-for="User.Email"></span></p>
+                </div>
+
+                <div class="form-pair">
+                    <label class="input-label" asp-for="User.Password"></label>
+                    <input class="input-textbox" asp-for="User.Password" />
+                    <p><span class="validation-error" asp-validation-for="User.Password"></span></p>
+                </div>
+
+                <div class="form-pair">
+                    <label class="input-label" asp-for="User.VerifyPassword"></label>
+                    <input class="input-textbox" asp-for="User.VerifyPassword" />
+                    <p><span class="validation-error" asp-validation-for="User.VerifyPassword"></span></p>
+                </div>
             </div>
+            <div class="button-row">
+                <input class="button" type="submit" value="Create" />
+            </div>
+
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-page="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{

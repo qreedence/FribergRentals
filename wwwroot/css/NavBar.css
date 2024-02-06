@@ -1,0 +1,52 @@
+﻿.navbar {
+    background-color: var(--grey);
+    display: flex;
+    flex-direction: row;
+}
+
+
+@media(min-width){
+
+}
+
+.logo {
+    margin-left: 30px;
+    width: 100px;
+    margin-right: 50px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-inline: 8px;
+}
+
+.right {
+    display: flex;
+    margin-left: auto;
+    margin-right: 15px;
+}
+
+.nav-button {
+    height: 50px;
+    width: 200px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: var(--fw-bold);
+    border: none;
+    border-radius: 6px;
+    margin-bottom: 2px;
+    border-bottom: 5px solid var(--almostblack);
+    background-color: white;
+    transition-duration: 0.2s;
+}
+
+    .nav-button:hover {
+        height: 65px;
+    }
+
+    .nav-button:active {
+        height: 65px;
+        background-color: rgb(166, 166, 166);
+    }
